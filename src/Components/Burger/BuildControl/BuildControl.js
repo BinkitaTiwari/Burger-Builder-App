@@ -21,7 +21,7 @@ const buildControl=(props)=>(
 			label={ctrl.label}
 			added={()=> props.addIngredient(ctrl.type)}
 			remove={()=> props.removeIngredient(ctrl.type)} 
-			disabled={props.disable[ctrl.type]} />
+			disabled={props.disabled[ctrl.type]} />
 			)
 
 
@@ -29,7 +29,7 @@ const buildControl=(props)=>(
 			)}
 	
 		<button className={classes.OrderButton}
-				disabled={!props.purchasable}
+				disabled={props.purchasable}
 				onClick={props.ordered}>ORDER NOW</button>
 				
 

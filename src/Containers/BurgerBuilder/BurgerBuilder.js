@@ -3,7 +3,8 @@ import Aux from '../../hoc/Auxi';
 import Burger from '../../Components/Burger/Burger';
 import BuildControl from '../../Components/Burger/BuildControl/BuildControl';
 import Modal from '../../Components/UI/Modal/Modal';
-import OrderSummary from '../../Components/Burger/OrderSummary/OrderSummary';
+import OrderSummary from '../../Components/Burger/OrderSummary/OrderSummary'
+
 const INGRIDIENTS_PRICE={
 
 salad:0.4,
@@ -25,43 +26,26 @@ class BurgerBuilder extends Component
 
 
 			},
+			
 			totalPrice:4,
-			purchasable:false,
-			purchasing:false
+			purchasable:false
 
 	}
 
-	updatePurchaseState (ingredients) {
-
-		//const ingredients={...this.state.ingredients};
-		const sum =Object.keys(ingredients)
-					.map(igKey =>{
-
-						return ingredients[igKey];
-					})
-					.reduce((sum,el)=>
-					{return sum+el;
-					},0)
-
-		this.setState({purchasable:sum>0});
-	}
-
-	purchaseHandler =() =>
+	updatePurchaseState(ingredients)
 	{
-		this.setState({purchasing:true});
-	}
-	
-	purchaseCancelHandler =() =>{
-			this.setState({purchasing:false});
-
-	}
-
-	purchaseContinueHandler = () =>{
-		alert('You Continue!!!');
+		//const ingredients={...this.state.ingredients};
+		const sum=Object.keys(ingredients).map(igKey=>{
+			return ingredients[igKey];
+		}).reduce((sum,el)=>{
+			return sum+el;
+		},0);
+		
+		this.setState({purchasable:sum>0},()=>{console.log(this.state.purchasable)});
 	}
 
 	addIngredientHandler=(type)=>{
-
+		console.log(type);
 		const oldCount=this.state.ingredients[type];
 		const updateCount=oldCount+1;
 		const updateIngredients={...this.state.ingredients};
@@ -72,10 +56,11 @@ class BurgerBuilder extends Component
 		const newPrice=oldPrice+priceAddition;
 		this.setState({totalPrice:newPrice,ingredients:updateIngredients});
 		this.updatePurchaseState(updateIngredients);
+
 	}
 
 	removeIngredientHandler =(type)=>{
-
+		console.log(type);
 		const oldCount=this.state.ingredients[type];
 		if(oldCount<=0){
 			return;
@@ -96,29 +81,25 @@ class BurgerBuilder extends Component
 	render()
 	{
 
-		const disableInfo={
+		const disabledInfo={
 			...this.state.ingredients
 		}
-		for(let key in disableInfo)
+		for(let key in disabledInfo)
 		{
-			disableInfo[key]=disableInfo[key]<=0
+			disabledInfo[key]=disabledInfo[key]<=0
 		}
 		return(
 
 			<Aux>
-				<Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-					<OrderSummary ingredients={this.state.ingredients}
-					purchaseCancelled={this.purchaseCancelHandler} 
-					purchaseContinued={this.purchaseContinueHandler}
-					price={this.state.totalPrice.toFixed(2)} />
+				<Modal>
+					<OrderSummary ingredients={this.state.ingredients} />
 				</Modal>
 				<Burger ingredients={this.state.ingredients} />
 				<BuildControl  
 				addIngredient={this.addIngredientHandler} 
 				removeIngredient={this.removeIngredientHandler } 
-				disable={disableInfo}
-				ordered={this.purchaseHandler}
-				purchasable={this.state.purchasable}
+				disabled={disabledInfo}
+				purchasable={this.state.updatePurchaseState}
 				price={this.state.totalPrice}/>
 			</Aux>
 
