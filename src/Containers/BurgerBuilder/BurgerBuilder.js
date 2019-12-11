@@ -8,6 +8,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/witherrorHandler/withErrorHandler';
 
+
 const INGREDIENT_PRICES = {
     salad: 0.5,
     cheese: 0.4,
@@ -31,7 +32,7 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount(){
-        axios.get('https://react-my-burger-91f47.firebaseio.com/orders/ingredients.json')
+        axios.get('https://react-my-burger-91f47.firebaseio.com/ingredients.json')
         .then(response=>{
             this.setState({ingredients:response.data});
         }).catch(error=>{
@@ -93,7 +94,7 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler = () => {
         //alert('You continue!');
-        this.setState({loading:true});
+       /* this.setState({loading:true});
         const order={
             ingredients:this.state.ingredients,
             price:this.state.totalPrice,
@@ -114,9 +115,21 @@ class BurgerBuilder extends Component {
         })
         .catch(err=>{
             this.setState({loading:false,purchasing:false});
+        });*/
+        const queryParams=[];
+        for (let i in this.state.ingredients){
+            queryParams.push(encodeURIComponent(i)+ '=' + encodeURIComponent(this.state.ingredients[i]));
+        }
+        queryParams.push('price=' + this.state.totalPrice);
+        const queryString=queryParams.join('&');
+        this.props.history.push({
+            pathname:'/Checkout',
+            search:'?' + queryString
         });
+
     }
 
+    
     render () {
         const disabledInfo = {
             ...this.state.ingredients

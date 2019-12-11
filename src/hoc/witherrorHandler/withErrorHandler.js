@@ -21,13 +21,13 @@ const withErrorHandler =(WrappedComponent,axios)=>{
             });
         }
 
-        componentWillUnmount()
+        /*componentWillUnmount()
         {
             console.log("Will unmount",this.reqInterceptor,this.resInterceptor);
             this.interceptors.request.eject(this.reqInterceptor);
             this.interceptors.response.eject(this.resInterceptor);
 
-        }
+        }*/
 
         errorConfirmHandler=()=>{
             this.setState({error:null});
